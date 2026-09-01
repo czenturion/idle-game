@@ -1,0 +1,88 @@
+@font-face {
+  font-family: 'PixelFont';    
+  src: url('./shared/fonts/Regez-Regular.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: fallback;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  color: black;
+}
+
+*,
+body,
+h1,
+h2,
+p {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'PixelFont', sans-serif;
+}
+
+body {
+  font-size: 34px;
+}
+
+ol,
+ul {
+  list-style: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.gui {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 150px 4fr;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: grey;
+  border: 1px black solid, 4 steps;
+  padding: 5px;
+}
+
+.content {
+  background-color: grey;
+  padding: 5px;
+}
+
+.menu ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu ul li {
+  font-size: 30px;
+  width: 100%;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.2rem;
+  padding: 8px 16px;
+  display: block;
+  border-radius: 4px;
+  transition: background 0.2s;
+  font-size: .9em;
+}
+
+.menu li a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.active-link {
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}

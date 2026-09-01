@@ -1,0 +1,218 @@
+.bossContainer {
+  padding: 24px;
+  max-width: 700px;
+  margin: 0 auto;
+  font-family: 'PixelFont', sans-serif;
+  color: #e0e0e0;
+}
+
+.bossContainer h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+/* Селектор босса */
+.bossSelector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #444;
+}
+
+.bossSelector label {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+.bossSelector select {
+  background: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.bossSelector select:hover {
+  border-color: #888;
+}
+.bossSelector select:focus {
+  border-color: #ffd700;
+}
+
+/* Карточки босса и игрока */
+.bossCard,
+.playerCard {
+  background: #1e1e1e;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  border: 1px solid #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.bossCard h3,
+.playerCard h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.bossCard p,
+.playerCard p {
+  margin-top: 8px;
+  font-size: 1rem;
+  color: #aaa;
+  letter-spacing: 0.5px;
+}
+
+/* Полоски HP */
+.hpBar {
+  background: #2a2a2a;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  height: 28px;
+  margin: 6px 0 4px;
+  border: 1px solid #444;
+}
+
+.hpFill {
+  height: 100%;
+  background: linear-gradient(90deg, #e74c3c, #f1c40f);
+  border-radius: 20px 0 0 20px;
+}
+
+.hpBar span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+
+/* Блок кнопок */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.btnFight,
+.btnFighting,
+.btnReset {
+  padding: 14px 32px;
+  border: none;
+  border-radius: 40px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 180px;
+}
+
+.btnFight {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+.btnFight:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+}
+.btnFight:active {
+  transform: scale(0.96);
+}
+
+.btnFighting {
+  background: #f39c12;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+}
+
+.btnReset {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+.btnReset:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+}
+.btnReset:active {
+  transform: scale(0.96);
+}
+
+/* (опционально) Лог боя – если раскомментируешь */
+.log {
+  margin-top: 24px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 12px 16px;
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid #333;
+  font-size: 0.95rem;
+}
+.log h4 {
+  color: #aaa;
+  margin-bottom: 8px;
+}
+.log ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.log li {
+  padding: 4px 0;
+  border-bottom: 1px solid #2a2a2a;
+  color: #ccc;
+}
+.log li:last-child {
+  border-bottom: none;
+}
+
+/* Адаптивность для маленьких экранов */
+@media (max-width: 600px) {
+  .bossContainer {
+    padding: 16px;
+  }
+  .bossSelector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bossSelector select {
+    width: 100%;
+  }
+  .btnFight,
+  .btnFighting,
+  .btnReset {
+    min-width: 140px;
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+  .actions {
+    flex-wrap: wrap;
+  }
+}
