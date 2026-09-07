@@ -2,9 +2,8 @@ import { useEffect } from 'react';
 import { Routes, Route, NavLink } from 'react-router-dom';
 import useGameStore from './store/gameStore';
 import './App.css';
-import Income from './pages/Income';
 import Researches from './pages/researches/Researches';
-import Quests from './pages/Quests';
+import Quests from './pages/quests/Quests';
 import Bosses from './pages/bosses/Bosses';
 import ProgressBar from './shared/ui/progressBar/ProgressBar';
 
@@ -22,15 +21,6 @@ function App() {
     <div className="menu">
       <ProgressBar />
       <ul>
-        <li>
-          <NavLink
-            to="/"
-            className={({ isActive }) => isActive ? 'active-link' : ''}
-            end
-          >
-            Доход
-          </NavLink>
-        </li>
         <li>
           <NavLink
             to='/researches'
@@ -59,7 +49,6 @@ function App() {
     </div>
     <div className="content">
       <Routes>
-        <Route path='/' element={<Income />} />
         <Route path='/researches' element={<Researches />} />
         <Route path='/quests' element={<Quests />} />
         <Route path='/bosses' element={<Bosses />} />

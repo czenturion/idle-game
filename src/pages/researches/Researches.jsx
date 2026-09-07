@@ -6,7 +6,7 @@ import s from './Researches.module.css';
 function Researches() {
     const { hp, def, str } = useGameStore((state) => state.stats);
     const { energy, currentUpgradeCost, increaseStat } = useGameStore((state) => state);
-    const { buttonFeedback, setButtonFeedback } = useState({})
+    const [ buttonFeedback, setButtonFeedback ] = useState({})
 
     const handleUpgrade = (statName) => {
         const success = increaseStat(statName)
@@ -39,7 +39,7 @@ function Researches() {
                                 <tr>
                                     <td
                                         onClick={() => handleUpgrade('str')}
-                                        className={`${styles.upgradeBtn} ${buttonFeedback.hp === 'success' ? styles.success : ''} ${buttonFeedback.hp === 'error' ? styles.error : ''}`}
+                                        className={`${s.upgradeBtn} ${buttonFeedback.hp === 'success' ? s.success : ''} ${buttonFeedback.hp === 'error' ? s.error : ''}`}
                                     >
                                         +1
                                     </td>

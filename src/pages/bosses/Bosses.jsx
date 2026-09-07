@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import useGameStore from '../../store/gameStore';
-import { BOSSES } from '../../store/gameStore';
+import { BOSSES } from '../../store/constants';
 import styles from './Bosses.module.css';
 
 function Bosses() {

@@ -1,13 +1,5 @@
 import { create } from 'zustand';
-
-export const BOSSES = [
-    { name: 'Комарик', hp: 5, def: 5, str: 5 },
-    { name: 'Ветер', hp: 8, def: 8, str: 8 },
-]
-
-const initialStats = {
-    hp: 1, def: 1, str: 1
-}
+import { initialStats, BOSSES, INITIAL_QUESTS } from './constants';
 
 const useGameStore = create((set, get) => ({
 
@@ -31,6 +23,8 @@ const useGameStore = create((set, get) => ({
     },
     battleState: 'idle',  // 'idle' | 'fighting' | 'won' | 'lost'
 
+    quests: INITIAL_QUESTS,
+
 
     // Шкала энергии
     tickProgress: () => {
@@ -43,9 +37,11 @@ const useGameStore = create((set, get) => ({
                 energy: energy + 1,
                 progress: 0,
             });
+            get().checkQuests();
         } else {
             set({ progress: newProgress });
         }
+        get().checkQuests();
     },
 
     // Прокачка статов
@@ -62,6 +58,7 @@ const useGameStore = create((set, get) => ({
             energy: state.energy - state.currentUpgradeCost,
             currentUpgradeCost: state.currentUpgradeCost + 1,
         }))
+        get().checkQuests();
         return true
     },
 
@@ -137,6 +134,7 @@ const useGameStore = create((set, get) => ({
             boss: newBoss,
             battleState: newState
         })
+        if (newState === 'idle') get().checkQuests();
     },
 
     resetBattle: () => {
@@ -147,6 +145,59 @@ const useGameStore = create((set, get) => ({
             battleState: 'idle',
             boss: { ...bossData, bossCurHp: bossData.hp },
         })
+    },
+
+    checkQuests: () => {
+        const { quests, stats, energy, souls, bossIndex } = get();
+        let updated = false;
+
+        const newQuests = quests.map((quest) => {
+            if (quest.completed || quest.claimed) return quest;
+
+            let current = quest.current;
+            switch (quest.type) {
+                case 'energy':
+                    current = energy;
+                    break;
+                case 'boss_kills':
+                    current = souls;
+                    break;
+                case 'stat_level':
+                    current = stats[quest.stat] || 0;
+                    break;
+                default:
+                    break;
+            }
+
+            const completed = current >= quest.target;
+            if (completed && !quest.completed) {
+                updated = true;
+            }
+            return { ...quest, current, completed };
+        })
+
+        if (updated) {
+            set({ quests: newQuests });
+        }
+    },
+
+    claimQuestReward: (questId) => {
+        const { quests, energy, souls } = get();
+        const quest = quests.find((q) => q.id === questId);
+        if (!quest || !quest.completed || quest.claimed) return false;
+
+        let newEnergy = energy;
+        let newSouls = souls;
+        if (quest.rewardType === 'energy') {
+            newEnergy += quest.rewardAmount;
+        } else if (quest.rewardType === 'souls') {
+            newSouls += quest.rewardAmount;
+        }
+
+        const newQuests = quests.map((q) => q.id === questId ? { ...q, claimed: true } : q);
+
+        set({ quests: newQuests, energy: newEnergy, souls: newSouls });
+        return true;
     }
 }))
 
