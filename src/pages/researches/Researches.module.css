@@ -1,6 +1,10 @@
 .researchContainer {
     display: flex;
     flex-direction: column;
+    max-width: 700px;
+    margin: 0 auto;
+    font-family: 'PixelFont', sans-serif;
+    color: #e0e0e0;
 }
 
 .researchHeading {
@@ -8,6 +12,35 @@
     border-left: 10px rgb(6, 177, 0) solid;
     height: 40px;
     padding-top: 6px;
+    margin-bottom: 20px;
+}
+
+.tabContent {
+    background: #646464;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: white;
+}
+
+.tabs {
+    display: flex;
+    gap: 12px;
+}
+
+.tab {
+    padding: 10px 20px;
+    background: #2a2a2a;
+    color: #aaa;
+    font-size: 2rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tab.activeTab {
+    background: #646464;
+    color: #fff;
 }
 
 .statsContainer {
@@ -41,15 +74,50 @@ td {
     max-width: 150px;
     width: 50px;
     transition: all .5s ease;
+    overflow: hidden;
 }
 
-td:first-child:hover {
+.stats td:first-child:hover {
     background-color: rgb(100, 100, 100);
     cursor: pointer;
     color: white;
 }
 
-td:last-child {
+.stats td:last-child {
     color: rgb(128, 255, 128);
     width: 100px;
+}
+
+.energy h2 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.soulUpgradeItem {
+    background: #555555;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.soulUpgradeItem h4 {
+    margin: 0;
+    color: #ffd700;
+}
+
+.soulUpgradeItem p {
+    margin: 4px 0;
+    color: #aaa;
+}
+
+.soulBuyBtn {
+    background: #2196f3;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.15s;
 }

@@ -7,7 +7,7 @@ function Quests() {
 
   return (
     <div className={s.questContainer}>
-      <h2>📜 Задания</h2>
+      <h2 className={s.questsHeading}>Задания</h2>
       {quests.length === 0 ? (
         <p>Нет заданий</p>
       ) : (

@@ -46,3 +46,39 @@ export const INITIAL_QUESTS = [
     rewardAmount: 10,
   },
 ];
+
+export const SOUL_UPGRADES = [
+  {
+    id: 'soul_str',
+    name: 'Сила предков',
+    description: '+5% к силе',
+    stat: 'str',
+    bonusPercent: 5,
+    baseCost: 1,
+    costMultiplier: 1.5, // цена = baseCost * (costMultiplier ^ level)
+    maxLevel: 10,
+    level: 0,
+  },
+  {
+    id: 'soul_def',
+    name: 'Крепкая броня',
+    description: '+5% к защите',
+    stat: 'def',
+    bonusPercent: 5,
+    baseCost: 1,
+    costMultiplier: 1.5,
+    maxLevel: 10,
+    level: 0,
+  },
+  {
+    id: 'soul_hp',
+    name: 'Живучесть',
+    description: '+5% к здоровью',
+    stat: 'hp',
+    bonusPercent: 5,
+    baseCost: 1,
+    costMultiplier: 1.5,
+    maxLevel: 10,
+    level: 0,
+  },
+];
