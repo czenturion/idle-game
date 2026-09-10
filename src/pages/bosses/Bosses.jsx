@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import useGameStore from '../../store/gameStore';
-import { BOSSES } from '../../store/constants';
 import styles from './Bosses.module.css';
+import { PixelButton, PixelCard, PixelProgress } from '@pxlkit/ui-kit';
 
 function Bosses() {
   const boss = useGameStore((state) => state.boss);
@@ -30,7 +30,7 @@ function Bosses() {
       const clampedDelta = Math.min(deltaTime, 0.5);
 
       update(deltaTime);
-    
+
       animationFrameId = requestAnimationFrame(loop);
     };
     animationFrameId = requestAnimationFrame(loop);
@@ -44,42 +44,37 @@ function Bosses() {
     <div className={styles.bossContainer}>
       <h2 className={styles.bossHeading}>Боссы</h2>
 
-      <div className={styles.bossCard}>
-        <h3>{boss.name}</h3>
-        <div className={styles.hpBar}>
-          <div className={styles.hpFill} style={{ width: `${bossHpPercent}%` }} />
-          <span>{Math.ceil(boss.bossCurHp * 100) / 100} / {boss.hp}</span>
-        </div>
+      <PixelCard title={boss.name}>
+        
+        <PixelProgress value={bossHpPercent} max={stats.hp} tone='red'/>
         <p>⚔️ Атака: {boss.str} | 🛡️ Защита: {boss.def}</p>
-      </div>
+      </PixelCard>
 
-      <div className={styles.playerCard}>
-        <h3>🧑 Игрок</h3>
-        <div className={styles.hpBar}>
-          <div className={styles.hpFill} style={{ width: `${playerHpPercent}%` }} />
-          <span>{Math.ceil(playerCurHp * 100) / 100} / {stats.hp}</span>
-        </div>
+      <PixelCard title='Игрок'>
+        
+          <PixelProgress value={playerHpPercent} max={stats.hp} tone='green'/>
+        
         <p>⚔️ Атака: {stats.str} | 🛡️ Защита: {stats.def}</p>
-      </div>
+      </PixelCard>
 
       <div className={styles.actions}>
         {(battleState === 'idle' || battleState === 'lost') && (
-          <button onClick={startBattle} className={styles.btnFight}>
+          <PixelButton tone='cyan' size="lg" onClick={startBattle} className='--retro-green'>
             ⚔️ Атаковать!
-          </button>
+          </PixelButton>
         )}
         {battleState === 'fighting' && (
-          <button disabled className={styles.btnFighting}>
+          <PixelButton disabled size="lg" tone='green'>
             🔄 Бой идёт...
-          </button>
+          </PixelButton>
         )}
         {(battleState === 'won' || battleState === 'lost') && (
-          <button onClick={resetBattle} className={styles.btnReset}>
+          <PixelButton tone='red' size="lg" onClick={resetBattle}>
             🔁 Начать заново
-          </button>
+          </PixelButton>
         )}
       </div>
-    </div>
+    </div >
   );
 }
 

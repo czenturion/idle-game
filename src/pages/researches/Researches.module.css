@@ -78,7 +78,6 @@ td {
 }
 
 .stats td:first-child:hover {
-    background-color: rgb(100, 100, 100);
     cursor: pointer;
     color: white;
 }
@@ -86,6 +85,16 @@ td {
 .stats td:last-child {
     color: rgb(128, 255, 128);
     width: 100px;
+}
+
+.upgradeBtn.success {
+    border-color: #4caf50;
+    background-color: #1b5e20;
+}
+
+.upgradeBtn.error {
+    border-color: #f44336;
+    background: #7f0000;
 }
 
 .energy h2 {
@@ -120,4 +129,17 @@ td {
     cursor: pointer;
     font-weight: bold;
     transition: 0.15s;
+}
+
+.soulBuyBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.soulBuyBtn.success {
+    background: #4caf50;
+}
+
+.soulBuyBtn.error {
+    background: #f44336;
 }

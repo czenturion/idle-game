@@ -30,7 +30,7 @@ function Researches() {
                 ...prev,
                 [statName]: null
             }))
-        }, 10000)
+        }, 400)
     }
 
     const handleSoulUpgrade = (upgradeId) => {
@@ -44,7 +44,7 @@ function Researches() {
                 ...prev,
                 [upgradeId]: null
             }))
-        }, 1000)
+        }, 400)
     }
 
     const getButtonClass = (statName) => {
@@ -211,7 +211,7 @@ function Researches() {
                                         <button
                                             className={`${s.soulBuyBtn} ${buttonFeedback[upgrade.id] === 'success' ? s.success : ''} ${buttonFeedback[upgrade.id] === 'error' ? s.error : ''}`}
                                             onClick={() => handleSoulUpgrade(upgrade.id)}
-                                            disabled={!canAfford || maxed}
+                                            // disabled={!canAfford || maxed}
                                         >
                                             {maxed ? 'MAX' : 'Купить'}
                                         </button>
