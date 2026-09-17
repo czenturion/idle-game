@@ -12,31 +12,10 @@ function Bosses() {
   const startBattle = useGameStore((state) => state.startBattle);
   const resetBattle = useGameStore((state) => state.resetBattle);
   const rebirth = useGameStore((state) => state.rebirth);
-  const update = useGameStore((state) => state.update);
 
 
   const bossHpPercent = boss.hp > 0 ? (boss.bossCurHp / boss.hp) * 100 : 0;
   const playerHpPercent = stats.hp > 0 ? (playerCurHp / stats.hp) * 100 : 0;
-
-  const lastTimeRef = useRef(performance.now());
-
-  useEffect(() => {
-    let animationFrameId;
-
-    const loop = (time) => {
-      const deltaTime = (time - lastTimeRef.current) / 1000;
-      lastTimeRef.current = time;
-
-      const clampedDelta = Math.min(deltaTime, 0.5);
-
-      update(deltaTime);
-
-      animationFrameId = requestAnimationFrame(loop);
-    };
-    animationFrameId = requestAnimationFrame(loop);
-
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [update]);
 
   const canRebirth = bossKills > 0 && battleState !== 'fighting'
 

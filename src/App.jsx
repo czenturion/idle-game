@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Routes, Route, NavLink } from 'react-router-dom';
 import useGameStore from './store/gameStore';
 import './App.css';
@@ -10,11 +10,32 @@ import ProgressBar from './shared/ui/progressBar/ProgressBar';
 
 function App() {
 
+  const lastTimeRef = useRef(performance.now());
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      useGameStore.getState().tickProgress();
-    }, 5);
-    return () => clearInterval(interval)
+    const energyInterval = setInterval(() => {
+      useGameStore.getState().tickProgress()
+    }, 5)
+
+
+    let rafId
+
+    const loop = (time) => {
+      const deltaTime = (time - lastTimeRef.current) / 1000
+      lastTimeRef.current = time
+
+      const clampedDelta = Math.min(deltaTime, 5)
+
+      useGameStore.getState().update(clampedDelta)
+      rafId = requestAnimationFrame(loop)
+    }
+
+    rafId = requestAnimationFrame(loop)
+
+    return () => {
+      clearInterval(energyInterval)
+      cancelAnimationFrame(rafId)
+    }
   }, []);
 
   return <div className="gui">
