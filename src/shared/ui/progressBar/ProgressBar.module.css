@@ -1,28 +1,7 @@
-.progressContainer {
-    overflow: hidden;
-    position: relative;
-    text-align: right;
+.title {
+    font-size: 14px;
 }
 
-.progressFill {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    min-width: 0;
-}
-
-.progressAmount {
-    width: 100%;
-    text-align: center;
-    padding: 5px 0;
-    color: rgb(128, 255, 128);
-    font-size: 30px;
-}
-
-.percentLabel {
-    font-size: 0.75rem;
-    font-weight: bold;
-    white-space: nowrap;
-    padding: 0 4px;
+.pb span {
+    display: none;
 }
