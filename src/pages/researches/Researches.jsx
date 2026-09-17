@@ -1,191 +1,115 @@
 import { useState } from 'react';
 import useGameStore from '../../store/gameStore';
 import { maxUpgradesCost } from './../../shared/helpers/gameMath.js';
+import {
+    PixelCard,
+    PixelButton,
+    PixelBadge,
+    PixelSectionHeader,
+} from '@pxlkit/ui-kit';
 import s from './Researches.module.css';
 
 function Researches() {
-    const { hp, def, str } = useGameStore((state) => state.stats);
-    const {
-        energy,
-        currentUpgradeCost,
-        increaseStat,
-        souls,
-        buySoulUpgrade,
-        soulUpgrades,
-        fillSpeed
-    } = useGameStore((state) => state);
+    const stats = useGameStore((state) => state.stats);
+    const energy = useGameStore((state) => state.energy);
+    const souls = useGameStore((state) => state.souls);
+    const currentUpgradeCost = useGameStore((state) => state.currentUpgradeCost);
+    const increaseStat = useGameStore((state) => state.increaseStat)
+    const buySoulUpgrade = useGameStore((state) => state.buySoulUpgrade)
+    const soulUpgrades = useGameStore((state) => state.soulUpgrades)
+    const fillSpeed = useGameStore((state) => state.fillSpeed);
 
     const [activeTab, setActiveTab] = useState('energy');
-    const [buttonFeedback, setButtonFeedback] = useState({})
+    const [feedback, setFeedback] = useState({})
+
+    const flash = (key, success) => {
+        setFeedback((prev) => ({ ...prev, [key]: success ? 'success' : 'error' }))
+        setTimeout(() => {
+            setFeedback((prev) => ({ ...prev, [key]: null }))
+        }, 400)
+    }
 
     const handleUpgrade = (statName) => {
-        const success = increaseStat(statName)
-        setButtonFeedback((prev) => ({
-            ...prev,
-            [statName]: success ? 'success' : 'error'
-        }))
-
-        setTimeout(() => {
-            setButtonFeedback((prev) => ({
-                ...prev,
-                [statName]: null
-            }))
-        }, 400)
+        const ok = increaseStat(statName)
+        flash(`stat_${statName}`, ok)
     }
 
     const handleSoulUpgrade = (upgradeId) => {
-        const success = buySoulUpgrade(upgradeId)
-        setButtonFeedback((prev) => ({
-            ...prev,
-            [upgradeId]: success ? 'success' : 'error'
-        }))
-        setTimeout(() => {
-            setButtonFeedback((prev) => ({
-                ...prev,
-                [upgradeId]: null
-            }))
-        }, 400)
-    }
-
-    const getButtonClass = (statName) => {
-        const status = buttonFeedback[statName]
-        return `${s.upgradeBtn} ${status === 'success' ? s.success : ''} ${status === 'error' ? s.error : ''}`
+        const ok = buySoulUpgrade(upgradeId)
+        flash(`soul_${upgradeId}`, ok)
     }
 
     const costFor5 = (currentUpgradeCost + (currentUpgradeCost + 4)) * 5 / 2
     const costMax = maxUpgradesCost(energy, currentUpgradeCost)
 
+    const cls = (key) => `${feedback[key] === 'success' ? s.success : ''} ${feedback[key] === 'error' ? s.error : ''}`
+
     return (
         <div className={s.researchContainer}>
-            <div className={s.researchHeading}>
-                <h2>Исследования</h2>
-            </div>
+            <PixelSectionHeader
+                title='Исследования'
+                description='Страница для прокачки персонажа и игрового процесса'
+                tone='green'
+            />
             <div className={s.tabs}>
-                <button
-                    className={`${s.tab} ${activeTab === 'energy' ? s.activeTab : ''}`}
+                <PixelButton
+                    tone={activeTab === 'energy' ? 'green' : 'neutral'}
                     onClick={() => setActiveTab('energy')}
                 >
                     Энергия
-                </button>
-                <button
-                    className={`${s.tab} ${activeTab === 'soul' ? s.activeTab : ''}`}
+                </PixelButton>
+                <PixelButton
+                    tone={activeTab === 'soul' ? 'purple' : 'neutral'}
                     onClick={() => setActiveTab('soul')}
                 >
                     Души
-                </button>
+                </PixelButton>
             </div>
 
             {
                 activeTab === 'energy' && (
-                    <div className={s.tabContent}>
-                        <div className={s.stats}>
-                            <div className={s.statsContainer}>
-                                <div className={s.statContainer}>
-                                    <p>Сила</p>
-                                    <p>{str}</p>
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td
-                                                    onClick={() => handleUpgrade('str')}
-                                                    className={getButtonClass('str')}
-                                                >
-                                                    +1
-                                                </td>
-                                                <td>
-                                                    {currentUpgradeCost}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    +5
-                                                </td>
-                                                <td>
-                                                    {costFor5}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Макс
-                                                </td>
-                                                <td>
-                                                    {costMax}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div className={s.statContainer}>
-                                    <p>Защита</p>
-                                    <p>{def}</p>
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td
-                                                    onClick={() => handleUpgrade('def')}
-                                                    className={getButtonClass('def')}
-                                                >
-                                                    +1
-                                                </td>
-                                                <td>
-                                                    {currentUpgradeCost}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    +5
-                                                </td>
-                                                <td>
-                                                    {costFor5}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Макс
-                                                </td>
-                                                <td>
-                                                    {costMax}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div className={s.statContainer}>
-                                    <p>Здоровье</p>
-                                    <p>{hp}</p>
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td
-                                                    onClick={() => handleUpgrade('hp')}
-                                                    className={getButtonClass('hp')}
-                                                >
-                                                    +1
-                                                </td>
-                                                <td>
-                                                    {currentUpgradeCost}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    +5
-                                                </td>
-                                                <td>
-                                                    {costFor5}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Макс
-                                                </td>
-                                                <td>
-                                                    {costMax}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    <div className={s.container}>
+                        <PixelCard className={s.header}>
+                            <span>Доступно энергии: </span>
+                            <span tone="green">{energy}</span >
+                        </PixelCard>
+                        <div className={s.tabContent}>
+
+                            {[
+                                { key: 'str', label: '⚔️ Сила', value: stats.str },
+                                { key: 'def', label: '🛡️ Защита', value: stats.def },
+                                { key: 'hp', label: '❤️ Здоровье', value: stats.hp },
+                            ].map(({ key, label, value }) => (
+                                <PixelCard key={key} title={label}>
+                                    <div className={s.statRow}>
+                                        Уровень:
+                                        <span className={s.statValue}>{value}</span>
+                                    </div>
+
+                                    <div className={s.actionsCol}>
+                                        <PixelButton
+                                            tone='green'
+                                            className={cls(`stat_${key}`)}
+                                            onClick={() => handleUpgrade(key)}
+                                            disabled={energy < currentUpgradeCost}
+                                        >
+                                            +1 · {currentUpgradeCost}🔋
+                                        </PixelButton>
+                                        <PixelButton
+                                            tone="cyan"
+                                            disabled
+                                        >
+                                            +5 · {costFor5}🔋
+                                        </PixelButton>
+                                        <PixelButton
+                                            tone="gold"
+                                            disabled
+                                        >
+                                            Макс · {costMax}🔋
+                                        </PixelButton>
+                                    </div>
+                                </PixelCard>
+                            ))}
                         </div>
                     </div>
                 )
@@ -193,48 +117,50 @@ function Researches() {
 
             {
                 activeTab === 'soul' && (
-                    <div className={s.tabContent}>
-                        <p>Душ: {souls}</p>
-                        {
-                            soulUpgrades.map((upgrade) => {
-                                const cost = Math.floor(upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.level))
-                                const maxed = upgrade.level >= upgrade.maxLevel
-                                const canAfford = souls >= cost && !maxed
-                                return (
-                                    <div key={upgrade.id} className={s.soulUpgradeItem}>
-                                        <div>
-                                            <h4>{upgrade.name}</h4>
-                                            <p>{upgrade.description}</p>
-                                            <p>Уровень: {upgrade.level} / {upgrade.maxLevel}</p>
-                                            <p>Стоимость: {maxed ? 'MAX' : cost}</p>
-                                        </div>
-                                        <button
-                                            className={`${s.soulBuyBtn} ${buttonFeedback[upgrade.id] === 'success' ? s.success : ''} ${buttonFeedback[upgrade.id] === 'error' ? s.error : ''}`}
-                                            onClick={() => handleSoulUpgrade(upgrade.id)}
-                                            // disabled={!canAfford || maxed}
+                    <div className={s.container}>
+                        <PixelCard className={s.header}>
+                            <span>Доступно душ: </span>
+                            <span tone="purple">{souls}</span >
+                        </PixelCard>
+                        <div className={s.soulList}>
+                            {
+                                soulUpgrades.map((up) => {
+                                    const cost = Math.floor(up.baseCost * Math.pow(up.costMultiplier, up.level))
+                                    const maxed = up.level >= up.maxLevel
+                                    const canAfford = souls >= cost && !maxed
+
+                                    return (
+                                        <PixelCard
+                                            key={up.id}
+                                            title={up.name}
                                         >
-                                            {maxed ? 'MAX' : 'Купить'}
-                                        </button>
-                                    </div>
-                                )
-                            })
-                        }
-                        <div className={s.energy}>
-                            <h2>Добыча&nbsp;Энергии</h2>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>Колличество&nbsp;энергии&nbsp;за&nbsp;тик</td>
-                                        <td>{fillSpeed}</td>
-                                        <td>Добавить&nbsp;+1&nbsp;к&nbsp;количеству&nbsp;энергии&nbsp;за&nbsp;тик</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Скорость&nbsp;заполнения&nbsp;шкалы&nbsp;энергии</td>
-                                        <td>{fillSpeed}</td>
-                                        <td>Добавить&nbsp;+0.1&nbsp;к&nbsp;скорости&nbsp;энергии&nbsp;тика</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            <p className={s.desc}>{up.description}</p>
+                                            <br />
+                                            <div className={s.soulRow}>
+                                                <span>
+                                                    Уровень:
+                                                    <br />
+                                                    <b>{up.level}/</b>{up.maxLevel}
+                                                    <br />
+                                                </span>
+                                                <span>
+                                                    Стоимость:{' '}
+                                                    {maxed ? (<PixelBadge tone="gold">MAX</PixelBadge>) : (
+                                                        <PixelBadge tone="purple">💀 {cost}</PixelBadge>
+                                                    )}
+                                                </span>
+                                                <PixelButton
+                                                    tone='purple'
+                                                    className={cls(`soul_${up.id}`)}
+                                                    onClick={() => handleSoulUpgrade(up.id)}
+                                                    disabled={!canAfford}
+                                                >
+                                                    {maxed ? 'Максимум' : 'Купить'}
+                                                </PixelButton>
+                                            </div>
+                                        </PixelCard>)
+                                })
+                            }
                         </div>
                     </div>
                 )

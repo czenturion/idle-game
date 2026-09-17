@@ -19,6 +19,7 @@ ul {
   background: var(--color-retro-card);
   border-right: 2px solid var(--color-retro-border);
   padding: 12px;
+  gap: 12px;
 }
 
 .content {
