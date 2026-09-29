@@ -5,7 +5,7 @@ import { initialStats, BOSSES, INITIAL_QUESTS, SOUL_UPGRADES } from './constants
 const useGameStore = create((set, get) => ({
 
     // Ресурсы
-    energy: 0,
+    energy: 10000,
     progress: 0,
     fillSpeed: 1,
     autoincome: 0,
@@ -70,16 +70,31 @@ const useGameStore = create((set, get) => ({
         const { soulUpgrades, souls } = get()
         const index = soulUpgrades.findIndex((SU) => SU.id === upgradeId)
         if (index === -1) return false
+
         const upgrade = soulUpgrades[index]
         if (upgrade.level >= upgrade.maxLevel) return false
+
+        const cost = Math.floor(upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.level))
+        if (souls < cost) return false
 
         const newUpgrades = [...soulUpgrades]
         newUpgrades[index] = { ...upgrade, level: upgrade.level + 1 }
         set({
             soulUpgrades: newUpgrades,
-            souls: souls - cookieStore,
+            souls: souls - cost,
         })
         return true
+    },
+
+    getEffectiveStat: (statName) => {
+        const { stats, soulUpgrades } = get()
+        const base = stats[statName] || 0
+        const upgrade = soulUpgrades.find((SU) => SU.stat === statName)
+        if (upgrade && upgrade.level > 0) {
+            const bonus = base * (upgrade.level * upgrade.bonusPercent / 100)
+            return base + bonus
+        }
+        return base
     },
 
     // Смена босса
@@ -93,8 +108,6 @@ const useGameStore = create((set, get) => ({
             },
             battleState: 'idle',
         })
-        clearInterval(get().battleIntervalId)
-        set({ battleIntervalId: null })
     },
 
     // Запуск боя
@@ -139,53 +152,55 @@ const useGameStore = create((set, get) => ({
             const effectiveStr = get().getEffectiveStat('str')
             const effectiveDef = get().getEffectiveStat('def')
 
-            const playerDPS = Math.max(1, effectiveStr - newBoss.def)
-            const bossDPS = Math.max(1, newBoss.str - effectiveDef)
+            const playerDPS = Math.max(0, effectiveStr - newBoss.def)
+            const bossDPS = Math.max(0, newBoss.str - effectiveDef)
 
-            newBoss.bossCurHp -= playerDPS * deltaTime
-            newPlayerHp -= bossDPS * deltaTime
-
-            newBoss.bossCurHp = Math.max(0, newBoss.bossCurHp)
-            newPlayerHp = Math.max(0, newPlayerHp)
+            newBoss.bossCurHp = Math.max(0, newBoss.bossCurHp - playerDPS * deltaTime)
+            newPlayerHp = Math.max(0, newPlayerHp - bossDPS * deltaTime)
 
             if (newBoss.bossCurHp <= 0) {
-                const nextIndex = get().bossIndex + 1
-                const newBossKills = get().bossKills + 1
-                const newTotalBossKills = get().totalBossKills + 1
+                const nextIndex = get().bossIndex + 1;
+                const newBossKills = get().bossKills + 1;
+                const newTotalBossKills = get().totalBossKills + 1;
 
                 if (nextIndex < BOSSES.length) {
-                    const nextBossData = BOSSES[nextIndex]
+                    const nextBossData = BOSSES[nextIndex];
                     set({
                         bossIndex: nextIndex,
                         boss: { ...nextBossData, bossCurHp: nextBossData.hp },
                         battleState: 'idle',
                         bossKills: newBossKills,
                         totalBossKills: newTotalBossKills,
-                    })
-                    get().checkQuests()
+                    });
+                } else {
+                    set({
+                        battleState: 'all_defeated',
+                        boss: { ...newBoss, bossCurHp: 0 },
+                        bossKills: newBossKills,
+                        totalBossKills: newTotalBossKills,
+                    });
                 }
-                return
-            } else if (newPlayerHp <= 0) {
-                newState = 'lost'
+                get().checkQuests();
+                return;
+            }
+
+            if (newPlayerHp <= 0) {
+                set({
+                    playerCurHp: 0,
+                    boss: newBoss,
+                    battleState: 'lost',
+                });
+                get().checkQuests();
+                return;
             }
         }
 
         set({
             playerCurHp: newPlayerHp,
             boss: newBoss,
-            battleState: newState
-        })
-    },
-
-    getEffectiveStat: (statName) => {
-        const { stats, soulUpgrades } = get()
-        const base = stats[statName] || 0
-        const upgrade = soulUpgrades.find((SU) => SU.stat === statName)
-        if (upgrade && upgrade.level > 0) {
-            const bonus = base * (upgrade.level * upgrade.bonusPercent / 100)
-            return base + bonus
-        }
-        return base
+            battleState: newState,
+        });
+        get().checkQuests(); 
     },
 
     resetBattle: () => {
@@ -199,7 +214,7 @@ const useGameStore = create((set, get) => ({
 
     checkQuests: () => {
         const { quests, stats, energy, totalBossKills } = get();
-        let updated = false;
+        let changed = false;
 
         const newQuests = quests.map((quest) => {
             if (quest.completed || quest.claimed) return quest;
@@ -220,13 +235,15 @@ const useGameStore = create((set, get) => ({
             }
 
             const completed = current >= quest.target;
-            if (completed && !quest.completed) {
-                updated = true;
+
+            if (current !== quest.current || completed !== quest.completed) {
+                changed = true;
+                return { ...quest, current, completed };
             }
-            return { ...quest, current, completed };
+            return quest;
         })
 
-        if (updated) {
+        if (changed) {
             set({ quests: newQuests });
         }
     },

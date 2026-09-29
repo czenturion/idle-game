@@ -1,23 +1,41 @@
 .bossContainer {
   display: flex;
   flex-direction: column;
+  padding-top: 18px;
   gap: 12px;
   max-width: 700px;
   margin: 0 auto;
   color: #e0e0e0;
 }
 
-.bossHeading {
-  background-color: rgb(255, 74, 74);
-  border-left: 10px rgb(255, 0, 0) solid;
-  height: 40px;
-  padding-top: 6px;
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 16px;
+  width: 100%;
 }
 
-/* Блок кнопок */
+.bossHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.bars p {
+  font-size: 0.7rem;
+}
+
 .actions {
   display: flex;
-  justify-content: center;
   gap: 16px;
   margin-top: 20px;
 }

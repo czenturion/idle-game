@@ -5,7 +5,7 @@ import './App.css';
 import Researches from './pages/researches/Researches';
 import Quests from './pages/quests/Quests';
 import Bosses from './pages/bosses/Bosses';
-import ProgressBar from './shared/ui/progressBar/ProgressBar';
+import EnergyProgressBar from './shared/ui/progressBar/ProgressBar';
 
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
 
   return <div className="gui">
     <div className="menu">
-      <ProgressBar />
+      <EnergyProgressBar />
       <ul>
         <li>
           <NavLink

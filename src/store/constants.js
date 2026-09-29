@@ -1,12 +1,17 @@
+import mosquito from '../shared/assets/bosses/mosquito.png';
+import wind from '../shared/assets/bosses/wind.png';
+import rain from '../shared/assets/bosses/rain.png';
+import hailstorm from '../shared/assets/bosses/hailstorm.png';
+
 export const initialStats = {
   hp: 1, def: 1, str: 1
 }
 
 export const BOSSES = [
-  { name: 'Комарик', hp: 5, def: 5, str: 5 },
-  { name: 'Ветер', hp: 8, def: 8, str: 8 },
-  { name: 'Дождь', hp: 14, def: 10, str: 10 },
-  { name: 'Град', hp: 17, def: 16, str: 17 },
+  { name: 'Комарик', hp: 5, def: 1, str: 2, sprite: mosquito },
+  { name: 'Ветер', hp: 8, def: 5, str: 4, sprite: wind },
+  { name: 'Дождь', hp: 14, def: 10, str: 10, sprite: rain },
+  { name: 'Град', hp: 17, def: 16, str: 17, sprite: hailstorm },
 ];
 
 export const INITIAL_QUESTS = [

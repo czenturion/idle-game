@@ -2,7 +2,7 @@ import useGameStore from '../../../store/gameStore';
 import { PixelCard, PixelProgress } from '@pxlkit/ui-kit';
 import s from './ProgressBar.module.css'
 
-const ProgressBar = ({ max = 100 }) => {
+const EnergyProgressBar = ({ max = 100 }) => {
     const progress = useGameStore((state) => state.progress);
     const energy = useGameStore((state) => state.energy);
 
@@ -16,4 +16,4 @@ const ProgressBar = ({ max = 100 }) => {
     )
 }
 
-export default ProgressBar;
+export default EnergyProgressBar;

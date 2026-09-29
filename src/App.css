@@ -29,7 +29,8 @@ ul {
 .menu ul {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 12px
 }
 
 .menu ul li {
@@ -42,6 +43,7 @@ ul {
   padding: 8px 16px;
   display: block;
   border-radius: 4px;
+  font-size: 10px;
 }
 
 .menu li a:hover {
@@ -52,3 +54,10 @@ ul {
   background: rgba(255, 255, 255, 0.3);
   font-weight: bold;
 }
+
+/* @media screen and (max-width: 900px) {
+  .menu {
+    background-color: red;
+    font-size: 8px;
+  }
+} */
