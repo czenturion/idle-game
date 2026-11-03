@@ -1,16 +1,30 @@
-# React + Vite
+# Idle Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Browser idle RPG: collect energy, level up your hero and defeat weather bosses.
 
-Currently, two official plugins are available:
+## Gameplay
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Energy** fills up on its own. Spend it on hero stats: strength, defense and health. Every upgrade costs one more than the previous one.
+- **Bosses**: four weather-themed bosses, each stronger than the last. Once started, a fight plays out in real time based on your stats.
+- **Quests** give rewards for reaching goals: collect energy, defeat a boss, level a stat.
+- **Rebirth** resets boss progress and turns defeated bosses into souls.
+- **Soul market**: spend souls on permanent percentage bonuses to stats.
 
-## React Compiler
+## Technical details
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Game state lives in a single Zustand store; components read only the slices they need
+- The game loop runs on `requestAnimationFrame` with delta time, capped so the game does not jump after the tab was in the background
+- "Buy max" upgrade cost is calculated with a formula (sum of an arithmetic progression) instead of a loop, see `src/shared/helpers/gameMath.js`
+- Separate pages for researches, quests and bosses with React Router
+- Pixel-art style: Press Start 2P font, custom sprites, CSS Modules
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+React 19, Zustand, React Router, Vite, CSS Modules, ESLint, Prettier
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
